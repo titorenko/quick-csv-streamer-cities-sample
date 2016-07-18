@@ -1,22 +1,26 @@
 package domain;
 
-import uk.elementarysoftware.quickcsv.api.CSVRecord;
+import uk.elementarysoftware.quickcsv.api.CSVRecordWithHeader;
 
 public class City {
-    private static final int CITY_FIELD_INDEX = 2;
+    
+    public static enum CSVFields {
+        AccentCity,
+        Population,
+        Latitude,
+        Longitude
+    }
     
     private final String city;
     private final int population;
     private final double latitude;
     private final double longitude;
 
-    public City(CSVRecord r) {
-        r.skipFields(CITY_FIELD_INDEX);
-        this.city = r.getNextField().asString();
-        r.skipField();
-        this.population = r.getNextField().asInt();
-        this.latitude = r.getNextField().asDouble();
-        this.longitude = r.getNextField().asDouble();
+    public City(CSVRecordWithHeader<CSVFields> r) {
+        this.city = r.getField(CSVFields.AccentCity).asString();
+        this.population = r.getField(CSVFields.Population).asInt();
+        this.latitude = r.getField(CSVFields.Latitude).asDouble();
+        this.longitude = r.getField(CSVFields.Longitude).asDouble();
     }
 
     public String getCity() {

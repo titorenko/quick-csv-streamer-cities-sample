@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
-import uk.elementarysoftware.quickcsv.api.CSVParserBuilder;
-import uk.elementarysoftware.quickcsv.api.CSVRecord;
 import domain.City;
+import uk.elementarysoftware.quickcsv.api.CSVParser;
+import uk.elementarysoftware.quickcsv.api.CSVParserBuilder;
 
 public class Parser {
 
     public static void main(String[] args) throws IOException {
         InputStream source = Parser.class.getResourceAsStream("/cities.txt");
-        Stream<CSVRecord> records = CSVParserBuilder.aParser().forRfc4180().skipFirstRecord().build().parse(source);
-        Stream<City> cities = records.map(r -> new City(r));
-        cities.forEach(c -> System.out.println(c));
+        CSVParser<City> parser = CSVParserBuilder.aParser(City::new, City.CSVFields.class).forRfc4180().build();
+        Stream<City> cities = parser.parse(source);
+        cities.forEach(System.out::println);
     }
 }
